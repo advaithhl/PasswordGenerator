@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'passwordgen.dart';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -31,6 +33,9 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  int passLength = 30;
+  PasswordGenerator _passwordGenerator = new PasswordGenerator();
+  String _pwd;
 
   void _incrementCounter() {
     setState(() {
@@ -40,6 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    _pwd = _passwordGenerator.generatePassword(passLength);
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -49,7 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'You have pushed the button this many times:',
+              '$_pwd',
             ),
             Text(
               '$_counter',
