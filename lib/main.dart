@@ -32,16 +32,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
   int passLength = 30;
   PasswordGenerator _passwordGenerator = new PasswordGenerator();
   String _pwd;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,17 +50,20 @@ class _MyHomePageState extends State<MyHomePage> {
             Text(
               '$_pwd',
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.display1,
+            Slider.adaptive(
+              value: passLength.toDouble(),
+              min: 10,
+              max: 50,
+              divisions: 40,
+              label: '$passLength',
+              onChanged: (double value) {
+                setState(() {
+                  this.passLength = value.round();
+                });
+              },
             ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
       ),
     );
   }
