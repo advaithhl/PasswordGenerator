@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_parsed_text/flutter_parsed_text.dart';
 
 import 'passwordgen.dart';
 
@@ -12,8 +13,15 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: _title,
       theme: ThemeData(
-        brightness: Brightness.dark,
-      ),
+          brightness: Brightness.dark,
+          textTheme: TextTheme(
+            subtitle: TextStyle(
+              color: Colors.white,
+              fontSize: 24,
+              fontFamily: 'Source Code Pro',
+              fontWeight: FontWeight.bold,
+            ),
+          )),
       home: MyHomePage(title: _title),
     );
   }
@@ -53,10 +61,35 @@ class _MyHomePageState extends State<MyHomePage> {
               flex: 3,
               child: Container(
                 child: Container(
-                  child: Text(
-                    '$_pwd',
-                    style: Theme.of(context).textTheme.headline,
-                    textAlign: TextAlign.center,
+                  child: ParsedText(
+                    text: '$_pwd',
+                    alignment: TextAlign.center,
+                    parse: <MatchText>[
+                      MatchText(
+                        pattern: r'[A-Z]',
+                        style: Theme.of(context).textTheme.subtitle.copyWith(
+                              color: Colors.purple,
+                            ),
+                      ),
+                      MatchText(
+                        pattern: r'[a-z]',
+                        style: Theme.of(context).textTheme.subtitle.copyWith(
+                              color: Colors.green,
+                            ),
+                      ),
+                      MatchText(
+                        pattern: r'[0-9]',
+                        style: Theme.of(context).textTheme.subtitle.copyWith(
+                              color: Colors.red,
+                            ),
+                      ),
+                      MatchText(
+                        pattern: r'\W|_',
+                        style: Theme.of(context).textTheme.subtitle.copyWith(
+                              color: Colors.white,
+                            ),
+                      ),
+                    ],
                   ),
                   alignment: Alignment.center,
                   padding: EdgeInsets.all(20.0),
