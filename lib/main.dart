@@ -70,24 +70,28 @@ class _MyHomePageState extends State<MyHomePage> {
                         style: Theme.of(context).textTheme.subtitle.copyWith(
                               color: Colors.purple,
                             ),
+                        onTap: (letter) {},
                       ),
                       MatchText(
                         pattern: r'[a-z]',
                         style: Theme.of(context).textTheme.subtitle.copyWith(
                               color: Colors.green,
                             ),
+                        onTap: (letter) {},
                       ),
                       MatchText(
                         pattern: r'[0-9]',
                         style: Theme.of(context).textTheme.subtitle.copyWith(
                               color: Colors.red,
                             ),
+                        onTap: (letter) {},
                       ),
                       MatchText(
                         pattern: r'\W|_',
                         style: Theme.of(context).textTheme.subtitle.copyWith(
                               color: Colors.white,
                             ),
+                        onTap: (letter) {},
                       ),
                     ],
                   ),
