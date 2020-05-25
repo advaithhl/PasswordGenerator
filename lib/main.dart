@@ -60,53 +60,57 @@ class _MyHomePageState extends State<MyHomePage> {
             Expanded(
               flex: 3,
               child: Container(
-                child: Container(
-                  child: ParsedText(
-                    text: '$_pwd',
-                    alignment: TextAlign.center,
-                    parse: <MatchText>[
-                      MatchText(
-                        pattern: r'[A-Z]',
-                        style: Theme.of(context).textTheme.subtitle.copyWith(
-                              color: Colors.purple,
-                            ),
-                        onTap: (letter) {},
-                      ),
-                      MatchText(
-                        pattern: r'[a-z]',
-                        style: Theme.of(context).textTheme.subtitle.copyWith(
-                              color: Colors.green,
-                            ),
-                        onTap: (letter) {},
-                      ),
-                      MatchText(
-                        pattern: r'[0-9]',
-                        style: Theme.of(context).textTheme.subtitle.copyWith(
-                              color: Colors.red,
-                            ),
-                        onTap: (letter) {},
-                      ),
-                      MatchText(
-                        pattern: r'\W|_',
-                        style: Theme.of(context).textTheme.subtitle.copyWith(
-                              color: Colors.white,
-                            ),
-                        onTap: (letter) {},
-                      ),
-                    ],
-                  ),
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.all(20.0),
-                  margin: EdgeInsets.all(30.0),
-                  constraints: BoxConstraints.tightFor(
-                    height: 200,
-                  ),
-                  decoration: BoxDecoration(
+                child: InkWell(
+                  child: Container(
+                    child: ParsedText(
+                      text: '$_pwd',
+                      alignment: TextAlign.center,
+                      parse: <MatchText>[
+                        MatchText(
+                          pattern: r'[A-Z]',
+                          style: Theme.of(context).textTheme.subtitle.copyWith(
+                                color: Colors.purple,
+                              ),
+                          onTap: (letter) {},
+                        ),
+                        MatchText(
+                          pattern: r'[a-z]',
+                          style: Theme.of(context).textTheme.subtitle.copyWith(
+                                color: Colors.green,
+                              ),
+                          onTap: (letter) {},
+                        ),
+                        MatchText(
+                          pattern: r'[0-9]',
+                          style: Theme.of(context).textTheme.subtitle.copyWith(
+                                color: Colors.red,
+                              ),
+                          onTap: (letter) {},
+                        ),
+                        MatchText(
+                          pattern: r'\W|_',
+                          style: Theme.of(context).textTheme.subtitle.copyWith(
+                                color: Colors.white,
+                              ),
+                          onTap: (letter) {},
+                        ),
+                      ],
+                    ),
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(20.0),
+                    constraints: BoxConstraints.tightFor(
+                      height: 200,
+                      width: MediaQuery.of(context).size.width - 60,
+                    ),
+                    decoration: BoxDecoration(
                       color: Colors.black38,
                       shape: BoxShape.rectangle,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(20),
-                      )),
+                    ),
+                  ),
+                  onDoubleTap: () {
+                    // TODO: Copy password here.
+                    print('User double tapped the password container.');
+                  },
                 ),
                 alignment: Alignment.center,
               ),
