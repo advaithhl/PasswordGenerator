@@ -1,4 +1,6 @@
+import 'package:clipboard_manager/clipboard_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_parsed_text/flutter_parsed_text.dart';
 
 import 'passwordgen.dart';
@@ -60,56 +62,68 @@ class _MyHomePageState extends State<MyHomePage> {
             Expanded(
               flex: 3,
               child: Container(
-                child: InkWell(
-                  child: Container(
-                    child: ParsedText(
-                      text: '$_pwd',
-                      alignment: TextAlign.center,
-                      parse: <MatchText>[
-                        MatchText(
-                          pattern: r'[A-Z]',
-                          style: Theme.of(context).textTheme.subtitle.copyWith(
-                                color: Colors.purple,
-                              ),
-                          onTap: (letter) {},
+                child: Builder(
+                  builder: (BuildContext context) {
+                    return InkWell(
+                      child: Container(
+                        child: ParsedText(
+                          text: '$_pwd',
+                          alignment: TextAlign.center,
+                          parse: <MatchText>[
+                            MatchText(
+                              pattern: r'[A-Z]',
+                              style:
+                                  Theme.of(context).textTheme.subtitle.copyWith(
+                                        color: Colors.purple,
+                                      ),
+                              onTap: (letter) {},
+                            ),
+                            MatchText(
+                              pattern: r'[a-z]',
+                              style:
+                                  Theme.of(context).textTheme.subtitle.copyWith(
+                                        color: Colors.green,
+                                      ),
+                              onTap: (letter) {},
+                            ),
+                            MatchText(
+                              pattern: r'[0-9]',
+                              style:
+                                  Theme.of(context).textTheme.subtitle.copyWith(
+                                        color: Colors.red,
+                                      ),
+                              onTap: (letter) {},
+                            ),
+                            MatchText(
+                              pattern: r'\W|_',
+                              style:
+                                  Theme.of(context).textTheme.subtitle.copyWith(
+                                        color: Colors.white,
+                                      ),
+                              onTap: (letter) {},
+                            ),
+                          ],
                         ),
-                        MatchText(
-                          pattern: r'[a-z]',
-                          style: Theme.of(context).textTheme.subtitle.copyWith(
-                                color: Colors.green,
-                              ),
-                          onTap: (letter) {},
+                        alignment: Alignment.center,
+                        padding: EdgeInsets.all(20.0),
+                        constraints: BoxConstraints.tightFor(
+                          height: 200,
+                          width: MediaQuery.of(context).size.width - 60,
                         ),
-                        MatchText(
-                          pattern: r'[0-9]',
-                          style: Theme.of(context).textTheme.subtitle.copyWith(
-                                color: Colors.red,
-                              ),
-                          onTap: (letter) {},
+                        decoration: BoxDecoration(
+                          color: Colors.black38,
+                          shape: BoxShape.rectangle,
                         ),
-                        MatchText(
-                          pattern: r'\W|_',
-                          style: Theme.of(context).textTheme.subtitle.copyWith(
-                                color: Colors.white,
-                              ),
-                          onTap: (letter) {},
-                        ),
-                      ],
-                    ),
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.all(20.0),
-                    constraints: BoxConstraints.tightFor(
-                      height: 200,
-                      width: MediaQuery.of(context).size.width - 60,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.black38,
-                      shape: BoxShape.rectangle,
-                    ),
-                  ),
-                  onDoubleTap: () {
-                    // TODO: Copy password here.
-                    print('User double tapped the password container.');
+                      ),
+                      onDoubleTap: () {
+                        ClipboardManager.copyToClipBoard(_pwd).then((result) {
+                          final snackBar = SnackBar(
+                            content: Text('Password copied!'),
+                          );
+                          Scaffold.of(context).showSnackBar(snackBar);
+                        });
+                      },
+                    );
                   },
                 ),
                 alignment: Alignment.center,
