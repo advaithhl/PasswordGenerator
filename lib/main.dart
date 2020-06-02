@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           brightness: Brightness.dark,
           textTheme: TextTheme(
-            subtitle: TextStyle(
+            subtitle2: TextStyle(
               color: Colors.white,
               fontSize: 24,
               fontFamily: 'Source Code Pro',
@@ -32,6 +32,7 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
   final String title;
+  final PasswordGenerator _pwdGen = new PasswordGenerator();
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -39,18 +40,24 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int passLength = 30;
-  PasswordGenerator _passwordGenerator = new PasswordGenerator();
-  String _pwd;
+  String _pwd = "generating password...";
 
   void setNewPassword() {
-    setState(() {
-      _pwd = _passwordGenerator.generatePassword(passLength);
+    widget._pwdGen.generatePassword(passLength).then((value) {
+      setState(() {
+        this._pwd = value;
+      });
     });
   }
 
   @override
+  void initState() {
+    super.initState();
+    setNewPassword();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    _pwd = _passwordGenerator.generatePassword(passLength);
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -61,7 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             Expanded(
               flex: 3,
-              child: Container(
+              child: Center(
                 child: Builder(
                   builder: (BuildContext context) {
                     return InkWell(
@@ -72,34 +79,45 @@ class _MyHomePageState extends State<MyHomePage> {
                           parse: <MatchText>[
                             MatchText(
                               pattern: r'[A-Z]',
-                              style:
-                                  Theme.of(context).textTheme.subtitle.copyWith(
-                                        color: Colors.purple,
-                                      ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle2
+                                  .copyWith(
+                                    color: Colors.purple,
+                                  ),
                               onTap: (letter) {},
                             ),
                             MatchText(
                               pattern: r'[a-z]',
-                              style:
-                                  Theme.of(context).textTheme.subtitle.copyWith(
-                                        color: Colors.green,
-                                      ),
+                              style: Theme
+                                  .of(context)
+                                  .textTheme
+                                  .subtitle2
+                                  .copyWith(
+                                color: Colors.green,
+                              ),
                               onTap: (letter) {},
                             ),
                             MatchText(
                               pattern: r'[0-9]',
-                              style:
-                                  Theme.of(context).textTheme.subtitle.copyWith(
-                                        color: Colors.red,
-                                      ),
+                              style: Theme
+                                  .of(context)
+                                  .textTheme
+                                  .subtitle2
+                                  .copyWith(
+                                color: Colors.red,
+                              ),
                               onTap: (letter) {},
                             ),
                             MatchText(
                               pattern: r'\W|_',
-                              style:
-                                  Theme.of(context).textTheme.subtitle.copyWith(
-                                        color: Colors.white,
-                                      ),
+                              style: Theme
+                                  .of(context)
+                                  .textTheme
+                                  .subtitle2
+                                  .copyWith(
+                                color: Colors.white,
+                              ),
                               onTap: (letter) {},
                             ),
                           ],
@@ -126,7 +144,6 @@ class _MyHomePageState extends State<MyHomePage> {
                     );
                   },
                 ),
-                alignment: Alignment.center,
               ),
             ),
             Flexible(
@@ -141,6 +158,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   setState(() {
                     this.passLength = value.round();
                   });
+                  setNewPassword();
                 },
               ),
             ),

@@ -21,12 +21,17 @@ class PasswordGenerator {
     return pwd.toString();
   }
 
-  String generatePassword(int length) {
-    while (true) {
-      String pwd = utilPass(length);
-      if (passwordOkay(pwd)) {
-        return pwd;
-      }
-    }
+  Future<String> generatePassword(int length) {
+    return Future(
+      () {
+        String pwd;
+        while (true) {
+          pwd = utilPass(length);
+          if (passwordOkay(pwd)) {
+            return pwd;
+          }
+        }
+      },
+    );
   }
 }
