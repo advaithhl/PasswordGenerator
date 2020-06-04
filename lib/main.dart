@@ -1,4 +1,5 @@
 import 'package:clipboard_manager/clipboard_manager.dart';
+import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_parsed_text/flutter_parsed_text.dart';
@@ -33,6 +34,7 @@ class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
   final String title;
   final PasswordGenerator _pwdGen = new PasswordGenerator();
+  final EncryptedSharedPreferences _eSharedPref = EncryptedSharedPreferences();
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -40,7 +42,24 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int passLength = 30;
-  String _pwd = "generating password...";
+  String _pwd = "loading...";
+
+  Future<bool> storePassword() {
+    return widget._eSharedPref.setString('copiedPass', this._pwd);
+  }
+
+  void setPassword() {
+    widget._eSharedPref.getString('copiedPass').then((sharedPrefValue) {
+      if (sharedPrefValue != '') {
+        setState(() {
+          this._pwd = sharedPrefValue;
+          this.passLength = sharedPrefValue.length;
+        });
+      } else {
+        setNewPassword();
+      }
+    });
+  }
 
   void setNewPassword() {
     widget._pwdGen.generatePassword(passLength).then((value) {
@@ -50,10 +69,14 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  Future<bool> clearStoredPassword() {
+    return widget._eSharedPref.clear();
+  }
+
   @override
   void initState() {
     super.initState();
-    setNewPassword();
+    setPassword();
   }
 
   @override
@@ -89,8 +112,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                             MatchText(
                               pattern: r'[a-z]',
-                              style: Theme
-                                  .of(context)
+                              style: Theme.of(context)
                                   .textTheme
                                   .subtitle2
                                   .copyWith(
@@ -135,9 +157,35 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                       onDoubleTap: () {
                         ClipboardManager.copyToClipBoard(_pwd).then((result) {
-                          final snackBar = SnackBar(
-                            content: Text('Password copied!'),
-                          );
+                          storePassword().then((storeResult) {
+                            var snackBar;
+                            if (storeResult) {
+                              snackBar = SnackBar(
+                                content: Text('Password copied!'),
+                              );
+                            } else {
+                              snackBar = SnackBar(
+                                content: Text('Something went wrong!'),
+                              );
+                            }
+                            Scaffold.of(context).showSnackBar(snackBar);
+                          });
+                        });
+                      },
+                      onLongPress: () {
+                        clearStoredPassword().then((deletionSuccess) {
+                          var snackBar;
+                          if (deletionSuccess) {
+                            setNewPassword();
+                            snackBar = SnackBar(
+                              content: Text('Cleared stored password!'),
+                            );
+                          } else {
+                            snackBar = SnackBar(
+                              content: Text(
+                                  'Something went wrong! Password not deleted!'),
+                            );
+                          }
                           Scaffold.of(context).showSnackBar(snackBar);
                         });
                       },
