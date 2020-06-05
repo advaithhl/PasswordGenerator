@@ -195,19 +195,24 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             Flexible(
-              flex: 1,
-              child: Slider.adaptive(
-                value: passLength.toDouble(),
-                min: 10,
-                max: 50,
-                divisions: 40,
-                label: '$passLength',
-                onChanged: (double value) {
-                  setState(() {
-                    this.passLength = value.round();
-                  });
-                  setNewPassword();
-                },
+              flex: 2,
+              child: Container(
+                child: Slider.adaptive(
+                  value: passLength.toDouble(),
+                  min: 10,
+                  max: 50,
+                  divisions: 40,
+                  label: '$passLength',
+                  onChanged: (double value) {
+                    setState(() {
+                      this.passLength = value.round();
+                    });
+                    setNewPassword();
+                  },
+                ),
+                constraints: BoxConstraints.tightFor(
+                  height: 100,
+                ),
               ),
             ),
           ],
