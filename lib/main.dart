@@ -1,4 +1,3 @@
-import 'package:clipboard_manager/clipboard_manager.dart';
 import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -156,7 +155,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                       ),
                       onDoubleTap: () {
-                        ClipboardManager.copyToClipBoard(_pwd).then((result) {
+                        var clipBoardData = ClipboardData(text: _pwd);
+                        Clipboard.setData(clipBoardData).then((result) {
                           storePassword().then((storeResult) {
                             var snackBar;
                             if (storeResult) {

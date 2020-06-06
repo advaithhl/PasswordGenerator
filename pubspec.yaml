@@ -21,7 +21,6 @@ dependencies:
     sdk: flutter
 
   flutter_parsed_text: ^1.2.4
-  clipboard_manager: ^0.0.1
   encrypted_shared_preferences: ^1.0.5
 
   # The following adds the Cupertino Icons font to your application.
