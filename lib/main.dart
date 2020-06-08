@@ -115,30 +115,28 @@ class _MyHomePageState extends State<MyHomePage> {
                                   .textTheme
                                   .subtitle2
                                   .copyWith(
-                                color: Colors.green,
-                              ),
+                                    color: Colors.green,
+                                  ),
                               onTap: (letter) {},
                             ),
                             MatchText(
                               pattern: r'[0-9]',
-                              style: Theme
-                                  .of(context)
+                              style: Theme.of(context)
                                   .textTheme
                                   .subtitle2
                                   .copyWith(
-                                color: Colors.red,
-                              ),
+                                    color: Colors.red,
+                                  ),
                               onTap: (letter) {},
                             ),
                             MatchText(
                               pattern: r'\W|_',
-                              style: Theme
-                                  .of(context)
+                              style: Theme.of(context)
                                   .textTheme
                                   .subtitle2
                                   .copyWith(
-                                color: Colors.white,
-                              ),
+                                    color: Colors.white,
+                                  ),
                               onTap: (letter) {},
                             ),
                           ],
