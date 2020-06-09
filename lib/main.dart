@@ -7,6 +7,9 @@ import 'passwordgen.dart';
 
 void main() => runApp(MyApp());
 
+/// Main [StatelessWidget] corresponding to the entire app.
+///
+/// Build a [MaterialApp] with home described as StatefulWidget [MyHomePage].
 class MyApp extends StatelessWidget {
   final String _title = 'Password Generator';
 
@@ -29,24 +32,46 @@ class MyApp extends StatelessWidget {
   }
 }
 
+/// Main StatefulWidget with state [_MyHomePageState].
 class MyHomePage extends StatefulWidget {
+  /// Accept title and set it as [AppBar] title in constructor.
   MyHomePage({Key key, this.title}) : super(key: key);
   final String title;
+
+  /// Generate new passwords with this instance of [PasswordGenerator].
   final PasswordGenerator _pwdGen = new PasswordGenerator();
+
+  /// Temporarily, but securely store one password with this instance of
+  /// [EncryptedSharedPreferences].
   final EncryptedSharedPreferences _eSharedPref = EncryptedSharedPreferences();
 
+  /// Create a state for this StatefulWidget.
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
+/// Maintain [State] of [MyHomePage].
+///
+/// Contain methods for storing/clearing passwords, and build almost all of
+/// the main UI.
 class _MyHomePageState extends State<MyHomePage> {
+  /// Length of the password. Used as [Slider] value. (default: 30)
   int passLength = 30;
+
+  /// Current value of password. Default set to avoid displaying "null" in UI.
   String _pwd = "loading...";
 
+  /// Store current password in [EncryptedSharedPreferences] with key
+  /// 'copiedPass'. Return a [Future] of [bool] which indicated success/failure
+  /// of storing.
   Future<bool> storePassword() {
     return widget._eSharedPref.setString('copiedPass', this._pwd);
   }
 
+  /// Set a password.
+  ///
+  /// Look if there exists a value for key 'copiedPass'. If there is, set state
+  /// of [_pwd] update [passLength] accordingly, else call [setNewPassword()].
   void setPassword() {
     widget._eSharedPref.getString('copiedPass').then((sharedPrefValue) {
       if (sharedPrefValue != '') {
@@ -60,6 +85,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  /// Generate a new password of length [passLength].
   void setNewPassword() {
     widget._pwdGen.generatePassword(passLength).then((value) {
       setState(() {
@@ -68,16 +94,38 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  /// Clear stored password.
+  ///
+  /// Note: this clears the values of ALL keys of [widget._eSharedPref].
+  /// This behaviour maybe changed in the future.
   Future<bool> clearStoredPassword() {
     return widget._eSharedPref.clear();
   }
 
+  /// Call super's [initState()] and [setPassword()]. This makes sure that a
+  /// password will always be set initially.
   @override
   void initState() {
     super.initState();
     setPassword();
   }
 
+  /// Build components corresponding to state values.
+  ///
+  /// Return a [Scaffold] comprise an app bar, body and a floating action
+  /// button. The body contains a centered Column, basically has 2 [Container]s.
+  ///
+  /// The first [Container] displays the current value of [_pwd], with each
+  /// type of character (uppercase, lowercase, digit and special) parsed out
+  /// and given different colors. This [Container] is also wrapped in an
+  /// [InkWell] to provide visual effects on double tap and long press.
+  /// Double tapping the [Container] copies the current value of [_pwd] into
+  /// the clipboard and displays a [SnackBar]. Long pressing clears the stored
+  /// value, sets a new password, and displays a [SnackBar].
+  ///
+  /// The second [Container] wraps the [Slider] and constrains the height of
+  /// itself to 100. This is done so as to deliberately limit the touch area
+  /// of the [Slider] to regions moderately close to the [Slider].
   @override
   Widget build(BuildContext context) {
     return Scaffold(
